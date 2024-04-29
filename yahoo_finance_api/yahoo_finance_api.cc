@@ -11,10 +11,10 @@ namespace YahooFinanceAPI {
 
 namespace {
 
-size_t write_fn(void* buffer, size_t size, size_t nmemb, void* param) {
-  std::string& text = *static_cast<std::string*>(param);
-  size_t total_size = size * nmemb;
-  text.append(static_cast<char*>(buffer), total_size);
+size_t write_fn(void* buffer, size_t size, size_t num_memb,
+                std::string& output) {
+  size_t total_size = size * num_memb;
+  output.append(static_cast<char*>(buffer), total_size);
   return total_size;
 }
 
@@ -74,6 +74,8 @@ std::string YahooFinanceAPI::Query() const {
   curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_fn);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &file);
+  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+  curl_easy_setopt(curl, CURLOPT_ENCODING, "");
   // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
 
   res = curl_easy_perform(curl);

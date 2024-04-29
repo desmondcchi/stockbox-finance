@@ -23,5 +23,17 @@ TEST(YahooFinanceAPITest, GOOGTest) {
   EXPECT_TRUE(absl::StrContains(res, "173.69"));
 }
 
+// Testing same test second time to test if SSL connection has errors.
+TEST(YahooFinanceAPITest, GOOGTest2) {
+  YahooFinanceAPI client = YahooFinanceAPI(
+      "GOOG",
+      absl::FromCivil(absl::CivilDay(2024, 4, 26), absl::LocalTimeZone()));
+
+  EXPECT_STREQ(client.GetTicker().c_str(), "GOOG");
+
+  std::string res = client.Query();
+  EXPECT_TRUE(absl::StrContains(res, "173.69"));
+}
+
 }  // namespace
 }  // namespace YahooFinanceAPI
